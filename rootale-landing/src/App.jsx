@@ -1,31 +1,33 @@
 import React from 'react';
 import './App.css';
+import { IoGitBranch, IoSparkles, IoChatbubbles } from 'react-icons/io5';
+
+// 스크롤 함수
+const scrollToSection = (sectionId) => {
+  const element = document.getElementById(sectionId);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
 function App() {
   return (
     <div className="app">
       {/* Hero Section */}
       <section className="hero-section">
-        <div className="glass-container hero-content">
+        <div className="hero-content">
           <div className="brand-logo">
             <h1 className="brand-title">
               <span className="brand-root">Roo</span>
               <span className="brand-tale">Tale</span>
             </h1>
-            <p className="brand-subtitle">Root + Tale</p>
           </div>
           
           <div className="hero-text">
             <h2 className="hero-title">
-              읽는 것을 넘어,<br />
-              <span className="highlight">이야기를 경험해라</span>
+              읽는 웹툰을 넘어<br />
+              <span className="highlight">이야기를 체험해라</span>
             </h2>
-            <p className="hero-subtitle">
-              읽는 웹툰에 질렸다면? <strong>Rootale해!</strong>
-            </p>
-            <p className="hero-description">
-              분기형 인터랙티브 웹툰으로 당신만의 스토리를 만들어보세요
-            </p>
           </div>
 
           <div className="cta-buttons">
@@ -33,19 +35,45 @@ function App() {
               <span className="btn-text">지금 시작하기</span>
               <div className="btn-glow"></div>
             </button>
-            <button className="btn-secondary glass-btn">
+            <button 
+              className="btn-secondary glass-btn"
+              onClick={() => scrollToSection('branch-section')}
+            >
               <span className="btn-text">더 알아보기</span>
             </button>
           </div>
         </div>
+      </section>
 
-        {/* Background Elements */}
-        <div className="hero-bg">
-          <div className="branch-lines"></div>
-          <div className="floating-elements">
-            <div className="float-element float-1"></div>
-            <div className="float-element float-2"></div>
-            <div className="float-element float-3"></div>
+      {/* Branch Experience Section */}
+      <section id="branch-section" className="branch-section">
+        <div className="branch-content">
+          <h2 className="section-title">
+            <span className="highlight">Branching</span>으로 탐색하는<br />
+            무한한 가능성
+          </h2>
+          <p className="section-description">
+            각 선택마다 새로운 Branch가 열립니다.<br />
+            당신만의 unique한 스토리 라인을 만들어보세요.
+          </p>
+          
+          <div className="branch-demo">
+            <div className="branch-node main-node">
+              시작
+            </div>
+            <div className="branch-connections">
+              <div className="branch-line line-1"></div>
+              <div className="branch-line line-2"></div>
+              <div className="branch-line line-3"></div>
+            </div>
+            <div className="branch-nodes">
+              <div className="branch-node">선택 A</div>
+              <div className="branch-node">선택 B</div>
+              <div className="branch-node locked-node">
+                숨겨진 Branch
+                <span className="lock-icon">🔒</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -60,7 +88,7 @@ function App() {
           <div className="features-grid">
             <div className="feature-card glass-card">
               <div className="feature-icon">
-                <div className="icon-branching"></div>
+                <IoGitBranch size={72} color="#00ffff" />
               </div>
               <h3 className="feature-title">분기형 인터랙티브 웹툰</h3>
               <p className="feature-description">
@@ -71,7 +99,7 @@ function App() {
 
             <div className="feature-card glass-card">
               <div className="feature-icon">
-                <div className="icon-ai"></div>
+                <IoSparkles size={72} color="#00ffff" />
               </div>
               <h3 className="feature-title">실시간 이미지 생성</h3>
               <p className="feature-description">
@@ -82,7 +110,7 @@ function App() {
 
             <div className="feature-card glass-card">
               <div className="feature-icon">
-                <div className="icon-chat"></div>
+                <IoChatbubbles size={72} color="#00ffff" />
               </div>
               <h3 className="feature-title">스토리 기반 캐릭터 챗</h3>
               <p className="feature-description">
@@ -94,46 +122,14 @@ function App() {
         </div>
       </section>
 
-      {/* Branch Experience Section */}
-      <section className="branch-section">
-        <div className="glass-container branch-content">
-          <h2 className="section-title">
-            <span className="highlight">Branching</span>으로 탐색하는<br />
-            무한한 가능성
-          </h2>
-          <p className="section-description">
-            각 선택마다 새로운 Branch가 열립니다. 
-            당신만의 unique한 스토리 라인을 만들어보세요.
-          </p>
-          
-          <div className="branch-demo">
-            <div className="branch-node main-node">
-              <span>시작</span>
-            </div>
-            <div className="branch-connections">
-              <div className="branch-line line-1"></div>
-              <div className="branch-line line-2"></div>
-              <div className="branch-line line-3"></div>
-            </div>
-            <div className="branch-nodes">
-              <div className="branch-node">선택 A</div>
-              <div className="branch-node">선택 B</div>
-              <div className="branch-node locked-node">숨겨진 Branch</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="cta-section">
         <div className="glass-container cta-content">
           <h2 className="cta-title">
             준비되셨나요?<br />
-            <span className="highlight">다음 세대 스토리텔링</span>을 시작하세요
+            <span className="highlight">다음 세대 스토리텔링</span>을<br />
+            시작하세요
           </h2>
-          <p className="cta-description">
-            OOO 캐릭터와 대화하고, 운명을 바꿔보세요
-          </p>
           
           <div className="cta-buttons">
             <button className="btn-primary glass-btn large-btn">
