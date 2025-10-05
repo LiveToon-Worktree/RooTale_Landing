@@ -19,11 +19,6 @@ const imageSources = [
   '/src/assets/feature-chat-bg.png',
 ];
 
-// MD 파일 목록
-const mdSources = [
-  '/docs/privacy-policy.md',
-  '/docs/terms-of-service.md',
-];
 
 // 로컬스토리지 키
 const CACHE_KEY = 'rootale_images_cached';
@@ -87,9 +82,9 @@ export const useImagePreloader = () => {
 
       console.log('🆕 첫 방문 - 이미지 로딩 완료까지 스플래시 화면 표시');
 
-      // 백그라운드에서 이미지 및 MD 파일 프리로딩
+      // 백그라운드에서 이미지 프리로딩
       const preloadResources = async () => {
-        const totalResources = imageSources.length + mdSources.length;
+        const totalResources = imageSources.length;
         let loadedCount = 0;
 
         // 이미지 로딩
@@ -120,33 +115,11 @@ export const useImagePreloader = () => {
           });
         };
 
-        // MD 파일 로딩
-        const loadMdFile = async (src) => {
-          return fetch(src)
-            .then(response => response.text())
-            .then(() => {
-              if (isMounted) {
-                loadedCount++;
-                setLoadedImages(loadedCount);
-                setLoadingProgress((loadedCount / totalResources) * 100);
-              }
-              console.log(`MD 파일 로드 완료: ${src}`);
-            })
-            .catch(error => {
-              console.warn(`MD 파일 로드 실패: ${src}`, error);
-              if (isMounted) {
-                loadedCount++;
-                setLoadedImages(loadedCount);
-                setLoadingProgress((loadedCount / totalResources) * 100);
-              }
-            });
-        };
 
         try {
-          // 이미지와 MD 파일을 병렬로 로딩
+          // 이미지 병렬로 로딩
           await Promise.all([
-            ...imageSources.map(loadImage),
-            ...mdSources.map(loadMdFile)
+            ...imageSources.map(loadImage)
           ]);
           if (isMounted) {
             markImagesAsCached();
@@ -156,8 +129,9 @@ export const useImagePreloader = () => {
         }
       };
 
-      // 이미지 및 MD 파일 프리로딩 완료까지 대기
-      console.log('📦 리소스 프리로딩 시작 (이미지 + MD 파일)');
+      // 이미지 프리로딩 완료까지 대기
+      console.log('📦 이미지 프리로딩 시작');
+      console.log('이미지 목록:', imageSources);
       await preloadResources();
       
       const totalElapsed = Date.now() - startTime;
@@ -189,7 +163,7 @@ export const useImagePreloader = () => {
     imagesLoaded,
     loadingProgress,
     loadedImages,
-    totalImages: imageSources.length + mdSources.length,
+    totalImages: imageSources.length,
     isFirstVisit,
     isFadingOut
   };
