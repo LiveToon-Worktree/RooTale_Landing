@@ -11,10 +11,14 @@
   justify-content: center;
   z-index: 9999;
   animation: fadeIn 0.3s ease-in;
+  /* 모바일 터치 이벤트 허용 */
+  touch-action: none;
 }
 
 .loading-container.fade-out {
   animation: fadeOut 0.3s ease-out forwards;
+  /* 페이드 아웃 시 터치/클릭 이벤트를 통과시킴 */
+  pointer-events: none;
 }
 
 .loading-spinner {

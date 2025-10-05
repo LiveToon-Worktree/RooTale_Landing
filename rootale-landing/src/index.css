@@ -73,11 +73,6 @@ a:hover {
 * {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 /* 텍스트는 선택 가능하도록 */
@@ -89,8 +84,18 @@ p, span, div, h1, h2, h3, h4, h5, h6 {
   user-select: text;
 }
 
+/* 버튼과 링크는 클릭 가능하도록 */
+button, a, input, select, textarea {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
 /* 모바일 스크롤 개선 */
 body {
-  touch-action: pan-y;
+  touch-action: pan-y pan-x;
   -webkit-overflow-scrolling: touch;
 }
