@@ -1,14 +1,44 @@
 import { useState, useEffect } from 'react';
 
+// 이미지들을 import로 가져와서 해시된 파일명 사용
+import Logo from '../assets/Logo.png';
+import PlayIcon from '../assets/play.svg';
+import AppleIcon from '../assets/apple.svg';
+import BranchIcon from '../assets/branch.svg';
+import BranchChoiceA from '../assets/branch-choice-a.png';
+import BranchChoiceB from '../assets/branch-choice-b.png';
+import BranchLocked from '../assets/branch-locked.png';
+import FeatureBranchBg from '../assets/feature-branch-bg.png';
+import FeatureAiBg from '../assets/feature-ai-bg.png';
+import FeatureChatBg from '../assets/feature-chat-bg.png';
 
-// 실제로 필요한 이미지들만 (동적 import로 처리)
+// 실제로 필요한 이미지들 (해시된 파일명)
 const imageSources = [
-  // 실제로 로딩이 필요한 이미지들만 여기에 추가
-  // 대부분의 이미지는 컴포넌트에서 필요할 때 로딩됨
+  Logo,
+  PlayIcon,
+  AppleIcon,
+  BranchIcon,
+  BranchChoiceA,
+  BranchChoiceB,
+  BranchLocked,
+  FeatureBranchBg,
+  FeatureAiBg,
+  FeatureChatBg,
 ];
 
-
-// window.onload 방식에서는 캐시 로직이 불필요
+// 이미지 프리로딩 함수
+const preloadImages = (srcs) =>
+  Promise.all(
+    srcs.map(
+      (src) =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = resolve;
+          img.onerror = resolve; // 실패해도 통과
+          img.src = src;
+        })
+    )
+  );
 
 // window.onload 기반 이미지 프리로딩 커스텀 훅
 export const useImagePreloader = () => {
@@ -18,12 +48,12 @@ export const useImagePreloader = () => {
 
   useEffect(() => {
     let isMounted = true;
-    let startTime = Date.now();
+    const startTime = Date.now();
     
     console.log('=== 스플래시 시작 ===');
     console.log('시작 시간:', startTime);
     
-    const handleWindowLoad = () => {
+    const completeLoading = () => {
       if (!isMounted) return;
       
       const totalElapsed = Date.now() - startTime;
@@ -42,30 +72,41 @@ export const useImagePreloader = () => {
       }, 300); // 페이드 아웃 시간과 동일
     };
 
-    // window.onload 이벤트 리스너 등록
-    if (document.readyState === 'complete') {
-      // 이미 로드가 완료된 경우 즉시 실행
-      handleWindowLoad();
-    } else {
-      window.addEventListener('load', handleWindowLoad);
-    }
+    // window.onload와 이미지 프리로딩을 병렬로 실행
+    const windowLoadPromise = new Promise((resolve) => {
+      if (document.readyState === 'complete') {
+        // 이미 로드가 완료된 경우 즉시 실행
+        resolve();
+      } else {
+        window.addEventListener('load', resolve, { once: true });
+      }
+    });
+
+    const imagePreloadPromise = preloadImages(imageSources).then(() => {
+      console.log('이미지 프리로딩 완료');
+    });
+
+    // 둘 다 완료될 때까지 대기
+    Promise.all([windowLoadPromise, imagePreloadPromise]).then(() => {
+      completeLoading();
+    });
 
     // 로딩 진행률 시뮬레이션 (사용자 경험을 위해)
     let progress = 0;
     const interval = setInterval(() => {
-      progress += 5;
+      progress += 3;
       if (isMounted) {
-        setLoadingProgress(Math.min(progress, 95)); // 95%까지만 (window.onload에서 100%로)
+        setLoadingProgress(Math.min(progress, 90)); // 90%까지만 (실제 로딩에서 100%로)
       }
       
-      if (progress >= 95) {
+      if (progress >= 90) {
         clearInterval(interval);
       }
-    }, 50);
+    }, 60);
 
     return () => {
       isMounted = false;
-      window.removeEventListener('load', handleWindowLoad);
+      window.removeEventListener('load', () => {});
       clearInterval(interval);
     };
   }, []);
