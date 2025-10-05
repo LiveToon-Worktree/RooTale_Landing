@@ -1,22 +1,9 @@
 import { useState, useEffect } from 'react';
 
-// 프로젝트에서 사용되는 모든 이미지 리소스 목록
+// 실제로 필요한 이미지들만 (동적 import로 처리)
 const imageSources = [
-  // Hero 컴포넌트 이미지들
-  '/src/assets/Logo.png',
-  '/src/assets/play.svg',
-  '/src/assets/apple.svg',
-  
-  // Branch 컴포넌트 이미지들
-  '/src/assets/branch.svg',
-  '/src/assets/branch-choice-a.png',
-  '/src/assets/branch-choice-b.png',
-  '/src/assets/branch-locked.png',
-  
-  // Features 컴포넌트 이미지들
-  '/src/assets/feature-branch-bg.png',
-  '/src/assets/feature-ai-bg.png',
-  '/src/assets/feature-chat-bg.png',
+  // 실제로 로딩이 필요한 이미지들만 여기에 추가
+  // 대부분의 이미지는 컴포넌트에서 필요할 때 로딩됨
 ];
 
 
@@ -80,62 +67,22 @@ export const useImagePreloader = () => {
         return;
       }
 
-      console.log('🆕 첫 방문 - 이미지 로딩 완료까지 스플래시 화면 표시');
+      console.log('🆕 첫 방문 - 최소 로딩 시간 대기');
 
-      // 백그라운드에서 이미지 프리로딩
-      const preloadResources = async () => {
-        const totalResources = imageSources.length;
-        let loadedCount = 0;
+      // 최소 로딩 시간 (사용자 경험을 위한)
+      const MIN_LOADING_TIME = 800; // 0.8초
+      
+      const loadingPromise = new Promise(resolve => {
+        setTimeout(() => {
+          console.log('최소 로딩 시간 완료');
+          resolve();
+        }, MIN_LOADING_TIME);
+      });
 
-        // 이미지 로딩
-        const loadImage = async (src) => {
-          return new Promise((resolve) => {
-            const img = new Image();
-            
-            img.onload = () => {
-              if (isMounted) {
-                loadedCount++;
-                setLoadedImages(loadedCount);
-                setLoadingProgress((loadedCount / totalResources) * 100);
-              }
-              resolve(img);
-            };
-            
-            img.onerror = () => {
-              console.warn(`이미지 로드 실패: ${src}`);
-              if (isMounted) {
-                loadedCount++;
-                setLoadedImages(loadedCount);
-                setLoadingProgress((loadedCount / totalResources) * 100);
-              }
-              resolve(null);
-            };
-            
-            img.src = src;
-          });
-        };
-
-
-        try {
-          // 이미지 병렬로 로딩
-          await Promise.all([
-            ...imageSources.map(loadImage)
-          ]);
-          if (isMounted) {
-            markImagesAsCached();
-          }
-        } catch (error) {
-          console.error('리소스 프리로딩 중 오류 발생:', error);
-        }
-      };
-
-      // 이미지 프리로딩 완료까지 대기
-      console.log('📦 이미지 프리로딩 시작');
-      console.log('이미지 목록:', imageSources);
-      await preloadResources();
+      await loadingPromise;
       
       const totalElapsed = Date.now() - startTime;
-      console.log(`✨ 이미지 프리로딩 완료 (총 경과: ${totalElapsed}ms)`);
+      console.log(`✨ 로딩 완료 (총 경과: ${totalElapsed}ms)`);
       console.log('🎬 페이드 아웃 시작');
       
       if (isMounted) {
@@ -161,9 +108,9 @@ export const useImagePreloader = () => {
 
   return {
     imagesLoaded,
-    loadingProgress,
-    loadedImages,
-    totalImages: imageSources.length,
+    loadingProgress: 100, // 항상 100%로 표시
+    loadedImages: 0,
+    totalImages: 0,
     isFirstVisit,
     isFadingOut
   };
