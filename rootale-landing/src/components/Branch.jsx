@@ -93,7 +93,7 @@ const Branch = () => {
         </p>
         
         <div className="start-button-container">
-          <button className="start-button" disabled>이야기 시작</button>
+          <button className="start-button">이야기 시작</button>
         </div>
         
         
