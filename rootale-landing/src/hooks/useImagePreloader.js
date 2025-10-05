@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Logo from '../assets/Logo.png';
 import PlayIcon from '../assets/play.svg';
 import AppleIcon from '../assets/apple.svg';
+import HeroBg from '../assets/hero-bg.png';
 import BranchIcon from '../assets/branch.svg';
 import BranchChoiceA from '../assets/branch-choice-a.png';
 import BranchChoiceB from '../assets/branch-choice-b.png';
@@ -17,6 +18,7 @@ const imageSources = [
   Logo,
   PlayIcon,
   AppleIcon,
+  HeroBg,
   BranchIcon,
   BranchChoiceA,
   BranchChoiceB,
