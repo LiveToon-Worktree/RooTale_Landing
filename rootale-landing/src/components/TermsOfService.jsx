@@ -1,24 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './TermsOfService.css';
 
-const TermsOfService = () => {
-  const [markdownContent, setMarkdownContent] = useState('');
-  const navigate = useNavigate();
+// Vite에서 ?raw 쿼리를 사용하여 마크다운 파일을 텍스트로 import
+import termsOfServiceText from '../docs/terms-of-service.md?raw';
 
-  useEffect(() => {
-    // 마크다운 파일을 가져오기
-    fetch('/docs/terms-of-service.md')
-      .then(response => response.text())
-      .then(text => setMarkdownContent(text))
-      .catch(error => {
-        console.error('이용약관 파일을 불러오는 중 오류가 발생했습니다:', error);
-        // 오류 발생 시 기본 내용 표시
-        setMarkdownContent('# 이용약관\n\n파일을 불러오는 중 오류가 발생했습니다.');
-      });
-  }, []);
+const TermsOfService = () => {
+  const navigate = useNavigate();
 
   return (
     <div className="terms-of-service">
@@ -65,7 +55,7 @@ const TermsOfService = () => {
                 }
               }}
             >
-              {markdownContent}
+              {termsOfServiceText}
             </ReactMarkdown>
           </div>
         </div>
