@@ -14,7 +14,7 @@ const Footer = () => {
           </p>
         </div>
         
-        <div className="footer-column">
+        <div className="footer-column footer-apps">
           <div className="app-buttons">
             <button className="app-store-btn">
               <img src="/src/assets/apple.svg" alt="App Store" className="app-icon" />

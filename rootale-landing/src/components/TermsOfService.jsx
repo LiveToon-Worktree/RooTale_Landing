@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './TermsOfService.css';
 
 const TermsOfService = () => {
   const [markdownContent, setMarkdownContent] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     // 마크다운 파일을 가져오기
@@ -23,6 +24,16 @@ const TermsOfService = () => {
     <div className="terms-of-service">
       <div className="terms-container">
         <header className="terms-header">
+          <button 
+            className="back-button"
+            onClick={() => navigate(-1)}
+            aria-label="뒤로가기"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="back-text">뒤로가기</span>
+          </button>
           <h1>이용약관</h1>
         </header>
         

@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { BsChatFill } from 'react-icons/bs';
+import { MdEmail } from 'react-icons/md';
 import './Contact.css';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
-    subject: '',
-    message: '',
-    inquiryType: 'general'
+    message: ''
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [copyNotification, setCopyNotification] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,47 +32,85 @@ const Contact = () => {
     setTimeout(() => {
       setIsSubmitted(false);
       setFormData({
-        name: '',
         email: '',
-        subject: '',
-        message: '',
-        inquiryType: 'general'
+        message: ''
       });
     }, 3000);
   };
 
+  const handleEmailCopy = async () => {
+    try {
+      await navigator.clipboard.writeText('livetoon.gdg@gmail.com');
+      setCopyNotification('이메일이 클립보드에 복사되었습니다!');
+      setTimeout(() => {
+        setCopyNotification('');
+      }, 2000);
+    } catch (err) {
+      console.error('클립보드 복사 실패:', err);
+      setCopyNotification('복사에 실패했습니다.');
+      setTimeout(() => {
+        setCopyNotification('');
+      }, 2000);
+    }
+  };
+
   return (
     <div className="contact">
+      {copyNotification && (
+        <div className="copy-notification">
+          <div className="copy-notification-content">
+            <span className="copy-icon">✅</span>
+            {copyNotification}
+          </div>
+        </div>
+      )}
       <div className="contact-container">
         <header className="contact-header">
+          <button 
+            className="back-button"
+            onClick={() => navigate(-1)}
+            aria-label="뒤로가기"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="back-text">뒤로가기</span>
+          </button>
           <h1>문의하기</h1>
-          <p>궁금한 점이 있으시면 언제든지 문의해 주세요. 빠른 시일 내에 답변드리겠습니다.</p>
         </header>
         
         <div className="contact-content">
-          <div className="contact-info-section">
-            <h2>연락처 정보</h2>
-            <div className="contact-cards">
-              <div className="contact-card">
-                <div className="contact-icon">📧</div>
-                <h3>이메일</h3>
-                <p>support@rootale.com</p>
+          <div className="contact-cards">
+            <a 
+              href="http://pf.kakao.com/_CxbdLn" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="contact-card contact-card-link"
+            >
+              <div className="contact-icon">
+                <BsChatFill />
               </div>
-              <div className="contact-card">
-                <div className="contact-icon">⏰</div>
-                <h3>운영시간</h3>
-                <p>평일 09:00 - 18:00<br/>(주말 및 공휴일 휴무)</p>
+              <div className="contact-card-content">
+                <p>카카오톡 오픈채널</p>
+                <p>실시간 문의 및 상담</p>
               </div>
-              <div className="contact-card">
-                <div className="contact-icon">📱</div>
-                <h3>응답시간</h3>
-                <p>문의 접수 후<br/>24시간 이내</p>
+            </a>
+            <div 
+              className="contact-card contact-card-clickable"
+              onClick={handleEmailCopy}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className="contact-icon">
+                <MdEmail />
+              </div>
+              <div className="contact-card-content">
+                <p>이메일</p>
+                <p>livetoon.gdg@gmail.com</p>
               </div>
             </div>
           </div>
 
           <div className="contact-form-section">
-            <h2>문의하기</h2>
             {isSubmitted ? (
               <div className="success-message">
                 <div className="success-icon">✅</div>
@@ -80,60 +119,16 @@ const Contact = () => {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="contact-form">
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="name">이름 *</label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      placeholder="이름을 입력해 주세요"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="email">이메일 *</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      placeholder="이메일을 입력해 주세요"
-                    />
-                  </div>
-                </div>
-
                 <div className="form-group">
-                  <label htmlFor="inquiryType">문의 유형</label>
-                  <select
-                    id="inquiryType"
-                    name="inquiryType"
-                    value={formData.inquiryType}
-                    onChange={handleChange}
-                  >
-                    <option value="general">일반 문의</option>
-                    <option value="technical">기술 지원</option>
-                    <option value="business">비즈니스 문의</option>
-                    <option value="bug">버그 신고</option>
-                    <option value="feature">기능 제안</option>
-                    <option value="other">기타</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="subject">제목 *</label>
+                  <label htmlFor="email">이메일 *</label>
                   <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
                     onChange={handleChange}
                     required
-                    placeholder="문의 제목을 입력해 주세요"
+                    placeholder="이메일을 입력해 주세요"
                   />
                 </div>
 
@@ -145,7 +140,6 @@ const Contact = () => {
                     value={formData.message}
                     onChange={handleChange}
                     required
-                    rows="6"
                     placeholder="문의 내용을 자세히 입력해 주세요"
                   />
                 </div>

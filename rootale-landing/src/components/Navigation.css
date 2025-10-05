@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 20px 0;
+  padding: 12px 0;
   background: rgba(0, 0, 0, 0.8);
 }
 
@@ -72,6 +72,10 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .navigation {
+    padding: 10px 0;
+  }
+  
   .nav-menu {
     gap: 20px;
   }
@@ -91,6 +95,10 @@
 }
 
 @media (max-width: 480px) {
+  .navigation {
+    padding: 8px 0;
+  }
+  
   .nav-container {
     padding: 0 16px;
   }
