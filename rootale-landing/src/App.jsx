@@ -10,6 +10,8 @@ import Footer from './components/Footer';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import Contact from './components/Contact';
+import Loading from './components/Loading';
+import { useImagePreloader } from './hooks/useImagePreloader';
 
 // 스크롤 함수
 const scrollToSection = (sectionId) => {
@@ -32,6 +34,13 @@ const HomePage = () => (
 );
 
 function App() {
+  const { imagesLoaded, loadingProgress, loadedImages, totalImages, isFirstVisit, isFadingOut } = useImagePreloader();
+
+  // 이미지가 로딩되지 않았으면 로딩 화면 표시
+  if (!imagesLoaded) {
+    return <Loading fadeOut={isFadingOut} />;
+  }
+
   return (
     <Router>
       <div className="app">
