@@ -5,9 +5,35 @@
   background: #000;
 }
 
+.features-section::before {
+  content: '';
+  position: absolute;
+  bottom: -5%;
+  right: 0;
+  width: 50%;
+  height: 70%;
+  background: radial-gradient(ellipse at right center, rgba(255, 165, 0, 0.25) 0%, transparent 60%);
+  filter: blur(120px);
+  z-index: 0;
+}
+
+.features-section::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 0;
+  width: 50%;
+  height: 60%;
+  background: radial-gradient(ellipse at left center, rgba(0, 255, 127, 0.25) 0%, transparent 60%);
+  filter: blur(120px);
+  z-index: 0;
+}
+
 .section-container {
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .section-title {

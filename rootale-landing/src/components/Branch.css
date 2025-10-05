@@ -6,11 +6,38 @@
   justify-content: center;
   min-height: 80vh;
   background: #000;
+  position: relative;
+}
+
+.branch-section::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: 0;
+  width: 50%;
+  height: 80%;
+  background: radial-gradient(ellipse at left center, rgba(0, 255, 255, 0.3) 0%, transparent 60%);
+  filter: blur(150px);
+  z-index: 0;
+}
+
+.branch-section::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  right: 0;
+  width: 50%;
+  height: 80%;
+  background: radial-gradient(ellipse at right center, rgba(255, 0, 255, 0.3) 0%, transparent 60%);
+  filter: blur(150px);
+  z-index: 0;
 }
 
 .branch-content {
   max-width: 1200px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .section-title {
