@@ -4,7 +4,7 @@ import './Hero.css';
 
 const Hero = ({ scrollToSection }) => {
   return (
-    <section className="hero-section">
+    <section id="hero-section" className="hero-section">
       <div className="hero-content">
         <div className="brand-logo">
           <img src="/src/assets/Logo.png" alt="RooTale" className="hero-logo-img" />
