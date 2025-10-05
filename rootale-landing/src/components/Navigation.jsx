@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { IoChevronDown } from 'react-icons/io5';
 import logoImg from '../assets/Logo.png';
@@ -7,9 +7,30 @@ import './Navigation.css';
 const Navigation = ({ scrollToSection }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [scrolled, setScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   
   // 현재 페이지가 홈페이지인지 확인
   const isHomePage = location.pathname === '/';
+
+  // 스크롤 이벤트 리스너
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      setScrolled(offset > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // 페이지 로드 시 애니메이션
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   // 페이지 이동 후 스크롤 처리
   useEffect(() => {
@@ -22,7 +43,7 @@ const Navigation = ({ scrollToSection }) => {
   }, [location.pathname]);
 
   return (
-    <nav className="navigation">
+    <nav className={`navigation ${scrolled ? 'scrolled' : ''} ${isVisible ? 'visible' : ''}`}>
       <div className="nav-container">
         <div className="nav-logo">
           <button 

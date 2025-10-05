@@ -1,19 +1,31 @@
 import React from 'react';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import './Features.css';
 import featureBranchBg from '../assets/feature-branch-bg.png';
 import featureAiBg from '../assets/feature-ai-bg.png';
 import featureChatBg from '../assets/feature-chat-bg.png';
 
 const Features = () => {
+  const [titleRef, titleVisible] = useScrollAnimation({ threshold: 0.2 });
+  const [card1Ref, card1Visible] = useScrollAnimation({ threshold: 0.2 });
+  const [card2Ref, card2Visible] = useScrollAnimation({ threshold: 0.2 });
+  const [card3Ref, card3Visible] = useScrollAnimation({ threshold: 0.2 });
+
   return (
     <section className="features-section">
       <div className="section-container">
-        <h2 className="section-title">
+        <h2 
+          ref={titleRef} 
+          className={`section-title ${titleVisible ? 'visible' : ''}`}
+        >
           새로운 스토리텔링을 <span className="highlight">경험하세요</span>
         </h2>
         
         <div className="features-grid">
-          <div className="feature-card glass-card feature-branch">
+          <div 
+            ref={card1Ref}
+            className={`feature-card glass-card feature-branch ${card1Visible ? 'visible' : ''}`}
+          >
             <img src={featureBranchBg} alt="Branch Feature" className="feature-bg-image" />
             <div className="feature-content">
               <h3 className="feature-title">분기형 인터랙티브 웹툰</h3>
@@ -24,7 +36,10 @@ const Features = () => {
             </div>
           </div>
 
-          <div className="feature-card glass-card feature-ai">
+          <div 
+            ref={card2Ref}
+            className={`feature-card glass-card feature-ai ${card2Visible ? 'visible' : ''}`}
+          >
             <img src={featureAiBg} alt="AI Feature" className="feature-bg-image" />
             <div className="feature-content">
               <h3 className="feature-title">실시간 이미지 생성</h3>
@@ -35,7 +50,10 @@ const Features = () => {
             </div>
           </div>
 
-          <div className="feature-card glass-card feature-chat">
+          <div 
+            ref={card3Ref}
+            className={`feature-card glass-card feature-chat ${card3Visible ? 'visible' : ''}`}
+          >
             <img src={featureChatBg} alt="Chat Feature" className="feature-bg-image" />
             <div className="feature-content">
               <h3 className="feature-title">스토리 기반 캐릭터 챗</h3>

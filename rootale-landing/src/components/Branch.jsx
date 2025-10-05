@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import branchSvg from '../assets/branch.svg';
 import branchChoiceA from '../assets/branch-choice-a.png';
 import branchChoiceB from '../assets/branch-choice-b.png';
@@ -8,6 +9,7 @@ import './Branch.css';
 const Branch = () => {
   const branchCardsRef = useRef([]);
   const svgRef = useRef(null);
+  const [sectionRef, sectionVisible] = useScrollAnimation({ threshold: 0.2 });
 
   useEffect(() => {
     const positionSvg = () => {
@@ -86,7 +88,11 @@ const Branch = () => {
   }, []);
 
   return (
-    <section id="branch-section" className="branch-section">
+    <section 
+      id="branch-section" 
+      ref={sectionRef}
+      className={`branch-section ${sectionVisible ? 'visible' : ''}`}
+    >
       <div className="branch-content">
         <h2 className="section-title">
           <span className="highlight">Branching</span>으로 탐색하는<br />무한한 가능성

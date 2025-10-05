@@ -17,6 +17,18 @@
   z-index: 3;
 }
 
+/* 애니메이션 효과 */
+.hero-content .animate-item {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.hero-content.loaded .animate-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .brand-logo {
   margin-bottom: 0px;
 }
@@ -51,7 +63,16 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+  }
+  to {
+    filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.8));
+  }
 }
 
 /* App Store Buttons */
@@ -80,7 +101,8 @@
 }
 
 .app-store-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-5px) scale(1.05);
+  filter: brightness(1.1);
 }
 
 .store-icon {

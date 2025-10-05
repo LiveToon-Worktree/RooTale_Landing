@@ -43,6 +43,14 @@
   margin-bottom: 60px;
   line-height: 1.2;
   color: #fff;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.section-title.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .features-grid {
@@ -58,7 +66,7 @@
 .glass-card {
   border-radius: 16px;
   padding: 0;
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
   position: relative;
   width: 100%;
   display: flex;
@@ -72,6 +80,13 @@
     linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
   z-index: 10;
   overflow: hidden;
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.glass-card.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .feature-bg-image {
@@ -103,7 +118,7 @@
   box-shadow: 
     0 0 30px rgba(0, 255, 255, 0.2),
     inset 0 0 30px rgba(0, 255, 255, 0.1);
-  transform: translateY(-2px);
+  transform: translateY(-10px) scale(1.02);
 }
 
 /* Feature Card Backgrounds */
