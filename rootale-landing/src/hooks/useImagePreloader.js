@@ -85,19 +85,7 @@ export const useImagePreloader = () => {
         return;
       }
 
-      console.log('🆕 첫 방문 - 1초 스플래시 화면 표시 시작');
-      
-      // 첫 방문일 때는 무조건 1초 스플래시 화면을 보여줌
-      const SPLASH_DURATION = 1000;
-      
-      const splashPromise = new Promise(resolve => {
-        console.log(`⏰ ${SPLASH_DURATION}ms 타이머 시작`);
-        setTimeout(() => {
-          const elapsed = Date.now() - startTime;
-          console.log(`⏰ 타이머 완료 (실제 경과: ${elapsed}ms)`);
-          resolve();
-        }, SPLASH_DURATION);
-      });
+      console.log('🆕 첫 방문 - 이미지 로딩 완료까지 스플래시 화면 표시');
 
       // 백그라운드에서 이미지 및 MD 파일 프리로딩
       const preloadResources = async () => {
@@ -168,12 +156,12 @@ export const useImagePreloader = () => {
         }
       };
 
-      // 스플래시와 리소스 프리로딩을 병렬로 실행하고, 둘 다 완료될 때까지 대기
-      console.log('📦 스플래시 & 리소스 프리로딩 시작 (이미지 + MD 파일)');
-      await Promise.all([splashPromise, preloadResources()]);
+      // 이미지 및 MD 파일 프리로딩 완료까지 대기
+      console.log('📦 리소스 프리로딩 시작 (이미지 + MD 파일)');
+      await preloadResources();
       
       const totalElapsed = Date.now() - startTime;
-      console.log(`✨ 스플래시 + 이미지 프리로딩 완료 (총 경과: ${totalElapsed}ms)`);
+      console.log(`✨ 이미지 프리로딩 완료 (총 경과: ${totalElapsed}ms)`);
       console.log('🎬 페이드 아웃 시작');
       
       if (isMounted) {
