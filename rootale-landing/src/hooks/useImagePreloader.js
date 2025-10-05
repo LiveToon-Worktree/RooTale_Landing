@@ -1,5 +1,37 @@
 import { useState, useEffect } from 'react';
 
+// 해시된 에셋들의 로딩 상태를 감지하는 함수
+const detectHashedAssets = () => {
+  return new Promise((resolve) => {
+    const assets = [];
+    
+    // Performance API를 사용해서 로딩된 리소스들 확인
+    if (window.performance && window.performance.getEntriesByType) {
+      const entries = window.performance.getEntriesByType('resource');
+      
+      // 이미지 파일들만 필터링 (png, jpg, svg, webp 등)
+      const imageEntries = entries.filter(entry => {
+        const url = entry.name.toLowerCase();
+        return url.includes('.png') || url.includes('.jpg') || url.includes('.jpeg') || 
+               url.includes('.svg') || url.includes('.webp') || url.includes('.gif');
+      });
+      
+      imageEntries.forEach(entry => {
+        assets.push({
+          name: entry.name.split('/').pop(), // 파일명만 추출
+          url: entry.name,
+          size: entry.transferSize || 0,
+          loadTime: entry.responseEnd - entry.responseStart,
+          loaded: true
+        });
+      });
+    }
+    
+    console.log('감지된 해시 에셋들:', assets);
+    resolve(assets);
+  });
+};
+
 // 실제로 필요한 이미지들만 (동적 import로 처리)
 const imageSources = [
   // 실제로 로딩이 필요한 이미지들만 여기에 추가
@@ -44,6 +76,7 @@ export const useImagePreloader = () => {
   const [imagesLoaded, setImagesLoaded] = useState(() => areImagesCached());
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadedImages, setLoadedImages] = useState(0);
+  const [detectedAssets, setDetectedAssets] = useState([]);
   const [isFirstVisit, setIsFirstVisit] = useState(() => !areImagesCached());
   const [isFadingOut, setIsFadingOut] = useState(false);
 
@@ -67,19 +100,39 @@ export const useImagePreloader = () => {
         return;
       }
 
-      console.log('🆕 첫 방문 - 최소 로딩 시간 대기');
+      console.log('🆕 첫 방문 - 해시된 에셋들 로딩 상태 확인');
 
-      // 최소 로딩 시간 (사용자 경험을 위한)
-      const MIN_LOADING_TIME = 800; // 0.8초
-      
-      const loadingPromise = new Promise(resolve => {
-        setTimeout(() => {
-          console.log('최소 로딩 시간 완료');
-          resolve();
-        }, MIN_LOADING_TIME);
-      });
+      // 해시된 에셋들의 로딩을 감지하는 함수
+      const waitForAssets = async () => {
+        const MIN_LOADING_TIME = 1000; // 최소 0.5초
+        const MAX_WAIT_TIME = 3000; // 최대 3초 대기
+        
+        const startTime = Date.now();
+        
+        while (Date.now() - startTime < MAX_WAIT_TIME) {
+          const assets = await detectHashedAssets();
+          
+          // 중요한 이미지들이 로딩되었는지 확인
+          const hasImportantAssets = assets.some(asset => 
+            asset.name.includes('hero-bg') || 
+            asset.name.includes('branch-choice') ||
+            asset.name.includes('feature-')
+          );
+          
+          if (hasImportantAssets && Date.now() - startTime >= MIN_LOADING_TIME) {
+            console.log('✅ 중요한 에셋들 로딩 완료');
+            break;
+          }
+          
+          // 100ms마다 확인
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        const finalAssets = await detectHashedAssets();
+        console.log('최종 로딩된 에셋들:', finalAssets);
+      };
 
-      await loadingPromise;
+      await waitForAssets();
       
       const totalElapsed = Date.now() - startTime;
       console.log(`✨ 로딩 완료 (총 경과: ${totalElapsed}ms)`);
@@ -108,9 +161,10 @@ export const useImagePreloader = () => {
 
   return {
     imagesLoaded,
-    loadingProgress: 100, // 항상 100%로 표시
-    loadedImages: 0,
-    totalImages: 0,
+    loadingProgress,
+    loadedImages,
+    totalImages: 10, // 예상 최대 에셋 수
+    detectedAssets, // 감지된 에셋들 정보
     isFirstVisit,
     isFadingOut
   };
