@@ -19,6 +19,12 @@ const imageSources = [
   '/src/assets/feature-chat-bg.png',
 ];
 
+// MD 파일 목록
+const mdSources = [
+  '/docs/privacy-policy.md',
+  '/docs/terms-of-service.md',
+];
+
 // 로컬스토리지 키
 const CACHE_KEY = 'rootale_images_cached';
 const CACHE_VERSION = '1.0.0';
@@ -93,11 +99,12 @@ export const useImagePreloader = () => {
         }, SPLASH_DURATION);
       });
 
-      // 백그라운드에서 이미지 프리로딩
-      const preloadImages = async () => {
-        const totalImages = imageSources.length;
+      // 백그라운드에서 이미지 및 MD 파일 프리로딩
+      const preloadResources = async () => {
+        const totalResources = imageSources.length + mdSources.length;
         let loadedCount = 0;
 
+        // 이미지 로딩
         const loadImage = async (src) => {
           return new Promise((resolve) => {
             const img = new Image();
@@ -106,7 +113,7 @@ export const useImagePreloader = () => {
               if (isMounted) {
                 loadedCount++;
                 setLoadedImages(loadedCount);
-                setLoadingProgress((loadedCount / totalImages) * 100);
+                setLoadingProgress((loadedCount / totalResources) * 100);
               }
               resolve(img);
             };
@@ -116,7 +123,7 @@ export const useImagePreloader = () => {
               if (isMounted) {
                 loadedCount++;
                 setLoadedImages(loadedCount);
-                setLoadingProgress((loadedCount / totalImages) * 100);
+                setLoadingProgress((loadedCount / totalResources) * 100);
               }
               resolve(null);
             };
@@ -125,19 +132,45 @@ export const useImagePreloader = () => {
           });
         };
 
+        // MD 파일 로딩
+        const loadMdFile = async (src) => {
+          return fetch(src)
+            .then(response => response.text())
+            .then(() => {
+              if (isMounted) {
+                loadedCount++;
+                setLoadedImages(loadedCount);
+                setLoadingProgress((loadedCount / totalResources) * 100);
+              }
+              console.log(`MD 파일 로드 완료: ${src}`);
+            })
+            .catch(error => {
+              console.warn(`MD 파일 로드 실패: ${src}`, error);
+              if (isMounted) {
+                loadedCount++;
+                setLoadedImages(loadedCount);
+                setLoadingProgress((loadedCount / totalResources) * 100);
+              }
+            });
+        };
+
         try {
-          await Promise.all(imageSources.map(loadImage));
+          // 이미지와 MD 파일을 병렬로 로딩
+          await Promise.all([
+            ...imageSources.map(loadImage),
+            ...mdSources.map(loadMdFile)
+          ]);
           if (isMounted) {
             markImagesAsCached();
           }
         } catch (error) {
-          console.error('이미지 프리로딩 중 오류 발생:', error);
+          console.error('리소스 프리로딩 중 오류 발생:', error);
         }
       };
 
-      // 스플래시와 이미지 프리로딩을 병렬로 실행하고, 둘 다 완료될 때까지 대기
-      console.log('📦 스플래시 & 이미지 프리로딩 시작');
-      await Promise.all([splashPromise, preloadImages()]);
+      // 스플래시와 리소스 프리로딩을 병렬로 실행하고, 둘 다 완료될 때까지 대기
+      console.log('📦 스플래시 & 리소스 프리로딩 시작 (이미지 + MD 파일)');
+      await Promise.all([splashPromise, preloadResources()]);
       
       const totalElapsed = Date.now() - startTime;
       console.log(`✨ 스플래시 + 이미지 프리로딩 완료 (총 경과: ${totalElapsed}ms)`);
@@ -168,7 +201,7 @@ export const useImagePreloader = () => {
     imagesLoaded,
     loadingProgress,
     loadedImages,
-    totalImages: imageSources.length,
+    totalImages: imageSources.length + mdSources.length,
     isFirstVisit,
     isFadingOut
   };
