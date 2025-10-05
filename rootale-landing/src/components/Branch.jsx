@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import branchSvg from '../assets/branch.svg';
+import branchChoiceA from '../assets/branch-choice-a.png';
+import branchChoiceB from '../assets/branch-choice-b.png';
+import branchLocked from '../assets/branch-locked.png';
 import './Branch.css';
 
 const Branch = () => {
@@ -100,21 +103,21 @@ const Branch = () => {
         <div className="branch-cards">
           <div className="branch-card" ref={el => branchCardsRef.current[0] = el}>
             <div className="card-image">
-              <img src="/src/assets/branch-choice-a.png" alt="선택 A" className="branch-image" />
+              <img src={branchChoiceA} alt="선택 A" className="branch-image" />
             </div>
             <button className="choice-button">선택 A</button>
           </div>
           
           <div className="branch-card" ref={el => branchCardsRef.current[1] = el}>
             <div className="card-image">
-              <img src="/src/assets/branch-choice-b.png" alt="선택 B" className="branch-image" />
+              <img src={branchChoiceB} alt="선택 B" className="branch-image" />
             </div>
             <button className="choice-button">선택 B</button>
           </div>
           
           <div className="branch-card locked-card" ref={el => branchCardsRef.current[2] = el}>
             <div className="card-image">
-              <img src="/src/assets/branch-locked.png" alt="숨겨진 Branch" className="branch-image" />
+              <img src={branchLocked} alt="숨겨진 Branch" className="branch-image" />
             </div>
             <button className="choice-button locked-button">숨겨진 Branch</button>
           </div>

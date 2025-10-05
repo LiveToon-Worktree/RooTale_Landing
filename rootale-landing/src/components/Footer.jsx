@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import appleIcon from '../assets/apple.svg';
+import playIcon from '../assets/play.svg';
 import './Footer.css';
 
 const Footer = () => {
@@ -17,10 +19,10 @@ const Footer = () => {
         <div className="footer-column footer-apps">
           <div className="app-buttons">
             <button className="app-store-btn">
-              <img src="/src/assets/apple.svg" alt="App Store" className="app-icon" />
+              <img src={appleIcon} alt="App Store" className="app-icon" />
             </button>
             <button className="google-play-btn">
-              <img src="/src/assets/play.svg" alt="Google Play" className="app-icon" />
+              <img src={playIcon} alt="Google Play" className="app-icon" />
             </button>
           </div>
         </div>

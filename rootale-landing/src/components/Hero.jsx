@@ -1,5 +1,8 @@
 import React from 'react';
 import { IoChevronDown } from 'react-icons/io5';
+import logoImg from '../assets/Logo.png';
+import playIcon from '../assets/play.svg';
+import appleIcon from '../assets/apple.svg';
 import './Hero.css';
 
 const Hero = ({ scrollToSection }) => {
@@ -7,7 +10,7 @@ const Hero = ({ scrollToSection }) => {
     <section id="hero-section" className="hero-section">
       <div className="hero-content">
         <div className="brand-logo">
-          <img src="/src/assets/Logo.png" alt="RooTale" className="hero-logo-img" />
+          <img src={logoImg} alt="RooTale" className="hero-logo-img" />
         </div>
         
         <div className="hero-text">
@@ -22,10 +25,10 @@ const Hero = ({ scrollToSection }) => {
 
         <div className="app-store-buttons">
           <button className="app-store-btn google-play">
-            <img src="/src/assets/play.svg" alt="Google Play" className="store-icon-img" />
+            <img src={playIcon} alt="Google Play" className="store-icon-img" />
           </button>
           <button className="app-store-btn app-store">
-            <img src="/src/assets/apple.svg" alt="App Store" className="store-icon-img" />
+            <img src={appleIcon} alt="App Store" className="store-icon-img" />
           </button>
         </div>
       </div>

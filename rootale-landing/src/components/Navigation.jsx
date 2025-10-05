@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { IoChevronDown } from 'react-icons/io5';
+import logoImg from '../assets/Logo.png';
 import './Navigation.css';
 
 const Navigation = ({ scrollToSection }) => {
@@ -53,7 +54,7 @@ const Navigation = ({ scrollToSection }) => {
               }
             }}
           >
-            <img src="/src/assets/Logo.png" alt="RooTale" className="nav-logo-img" />
+            <img src={logoImg} alt="RooTale" className="nav-logo-img" />
           </button>
         </div>
         <div className="nav-menu">
